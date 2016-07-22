@@ -5,6 +5,9 @@
     <attr name="secondColor" format="color" />
     <attr name="circleWidth" format="dimension" />
     <attr name="speed" format="integer" />
+    <attr name="dotCount" format="integer" />
+    <attr name="splitSize" format="integer" />
+    <attr name="bg" format="reference"></attr>
 
     <declare-styleable name="CirProgressView">
         <attr name="firstColor" />
@@ -13,4 +16,12 @@
         <attr name="speed" />
     </declare-styleable>
 
+    <declare-styleable name="VoiceControlView">
+        <attr name="firstColor" />
+        <attr name="secondColor" />
+        <attr name="circleWidth" />
+        <attr name="dotCount" />
+        <attr name="splitSize" />
+        <attr name="bg" />
+    </declare-styleable>
 </resources>
