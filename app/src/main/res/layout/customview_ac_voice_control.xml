@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cir="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.wendy.demoproject.customView.widgets.VoiceControlView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        cir:bg="@mipmap/ic_keyboard_voice_white_36dp"
+        cir:circleWidth="16dp"
+        cir:dotCount="20"
+        cir:splitSize="20"/>
+
+</LinearLayout>

@@ -16,7 +16,7 @@ public class CustomViewActivity extends ListActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String[] items = {"进程框"};
+        String[] items = {"进程框","音量控制器"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,items);
         this.setListAdapter(adapter);
 
@@ -27,6 +27,9 @@ public class CustomViewActivity extends ListActivity{
                 switch (position){
                     case 0:
                         startActivity(new Intent(CustomViewActivity.this, CirActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(CustomViewActivity.this,VoiceControlActivity.class));
                         break;
                 }
             }

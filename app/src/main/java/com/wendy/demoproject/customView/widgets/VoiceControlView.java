@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.eagle.androidlib.utils.DensityUtil;
@@ -24,12 +25,12 @@ public class VoiceControlView extends View {
     /**
      * 第一圈的颜色
      */
-    private int mFirstColor;
+    private int mFirstColor = Color.RED;
 
     /**
      * 第二圈的颜色
      */
-    private int mSecondColor;
+    private int mSecondColor = Color.BLUE;
     /**
      * 圈的宽度
      */
@@ -50,11 +51,11 @@ public class VoiceControlView extends View {
     /**
      * 每个块块间的间隙
      */
-    private int mSplitSize;
+    private int mSplitSize = 20;
     /**
      * 个数
      */
-    private int mCount;
+    private int mCount = 30;
 
     private Rect mRect;
 
@@ -82,10 +83,10 @@ public class VoiceControlView extends View {
                         mImage = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(type,0));
                         break;
                     case R.styleable.VoiceControlView_dotCount:
-                        mCount = typedArray.getInt(type,0);
+                        mCount = typedArray.getInt(type,30);
                         break;
                     case R.styleable.VoiceControlView_splitSize:
-                        mSplitSize = typedArray.getInt(type,0);
+                        mSplitSize = typedArray.getInt(type,20);
                         break;
                     case R.styleable.VoiceControlView_firstColor:
                         mFirstColor = typedArray.getColor(type, Color.WHITE);
@@ -95,11 +96,10 @@ public class VoiceControlView extends View {
                         break;
                 }
             }
-
-            typedArray.recycle();//清除
-            mPaint = new Paint();
-            mRect = new Rect();
         }
+        typedArray.recycle();//清除
+        mPaint = new Paint();
+        mRect = new Rect();
     }
 
     @Override
@@ -115,7 +115,22 @@ public class VoiceControlView extends View {
          * 画块块去
          */
         drawOval(canvas, centre, radius);
-        
+
+        int redRadius = radius - mCircleWidth / 2 ; //获取到内圆的半径
+        mRect.left =  (int)(redRadius - Math.sqrt(2)/2 *redRadius) + mCircleWidth;
+        mRect.top = (int)(redRadius - Math.sqrt(2)/2 *redRadius) + mCircleWidth;
+        mRect.bottom = mRect.top + mImage.getWidth();
+        mRect.right = mRect.left + mImage.getHeight();
+
+        //如果图片比较小，那么可以根据图片的大小放置到正中心
+        if ( mImage.getWidth() < Math.sqrt(2)/2 * redRadius){
+            mRect.left = (int)(mRect.left + Math.sqrt(2)/2 * redRadius - mImage.getWidth()/2 );
+            mRect.top = (int)(mRect.top + Math.sqrt(2)/2 * redRadius - mImage.getWidth()/2);
+            mRect.right = mRect.left + mImage.getWidth();
+            mRect.bottom = mRect.top + mImage.getHeight();
+        }
+
+        canvas.drawBitmap(mImage,null,mRect,mPaint);
     }
 
 
@@ -132,5 +147,44 @@ public class VoiceControlView extends View {
             canvas.drawArc(oval,i*(mSplitSize+itemSize) , itemSize,false,mPaint);
         }
 
+    }
+
+    /**
+     * 当前数量+1
+     */
+    public void up()
+    {
+        mCurrentCount++;
+        postInvalidate();
+    }
+
+    /**
+     * 当前数量-1
+     */
+    public void down()
+    {
+        mCurrentCount--;
+        postInvalidate();
+    }
+    private int xDown, xUp;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                xDown = (int) event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                xUp = (int) event.getY();
+                if (xUp > xDown)// 下滑
+                {
+                    down();
+                } else
+                {
+                    up();
+                }
+                break;
+        }
+        return true;
     }
 }
