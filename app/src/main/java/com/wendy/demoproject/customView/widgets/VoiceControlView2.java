@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.AudioManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -60,6 +61,7 @@ public class VoiceControlView2 extends View {
     private int mCount ;
 
     private Rect mRect;
+    private AudioManager audioManager;
 
     public VoiceControlView2(Context context) {
         this(context,null);
@@ -84,6 +86,13 @@ public class VoiceControlView2 extends View {
 
         mPaint = new Paint();
         mRect = new Rect();
+
+        audioManager =(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mCount = maxVolume;
+        mCurrentCount = currentVolume;
+        Logger.d(getContext(),"itemSize="+mCount+"--currentItem="+mCurrentCount);
 
     }
 
@@ -157,6 +166,7 @@ public class VoiceControlView2 extends View {
     public void up() {
         if (mCurrentCount < mCount){
             mCurrentCount++;
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC , mCurrentCount,AudioManager.FLAG_SHOW_UI);
             postInvalidate();
         }
     }
@@ -167,6 +177,7 @@ public class VoiceControlView2 extends View {
     public void down() {
         if (mCurrentCount > 0){
             mCurrentCount--;
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC , mCurrentCount,AudioManager.FLAG_SHOW_UI);
             postInvalidate();
         }
     }
