@@ -183,8 +183,12 @@ public class VoiceControlView2 extends View {
             case MotionEvent.ACTION_UP:
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mMoveCount /2 == 0){
-                    xUp = event.getX();
+                xUp = event.getX();
+                /**
+                 * mMoveCount%4是为了减小移动速度
+                 * Match.abs(xUp-xDown)>10 当手指只是稍微移动时，音量不变
+                 */
+                if (mMoveCount %4 == 0 && Math.abs(xUp-xDown)>5){
                     if ((xUp-xDown)>0) up();
                     else down();
                 }
