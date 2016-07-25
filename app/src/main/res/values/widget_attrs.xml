@@ -7,6 +7,7 @@
     <attr name="speed" format="integer" />
     <attr name="dotCount" format="integer" />
     <attr name="splitSize" format="integer" />
+    <attr name="itemSize" format="integer"></attr>
     <attr name="bg" format="reference"></attr>
 
     <declare-styleable name="CirProgressView">
@@ -23,5 +24,6 @@
         <attr name="dotCount" />
         <attr name="splitSize" />
         <attr name="bg" />
+        <attr name="itemSize"/>
     </declare-styleable>
 </resources>

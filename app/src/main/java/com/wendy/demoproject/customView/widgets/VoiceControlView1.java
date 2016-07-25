@@ -19,22 +19,22 @@ import com.wendy.demoproject.R;
 /**
  * Created by Administrator on 2016/7/22 0022.
  */
-public class VoiceControlView extends View {
+public class VoiceControlView1 extends View {
 
 
     /**
      * 第一圈的颜色
      */
-    private int mFirstColor = Color.RED;
+    private int mFirstColor;
 
     /**
      * 第二圈的颜色
      */
-    private int mSecondColor = Color.BLUE;
+    private int mSecondColor;
     /**
      * 圈的宽度
      */
-    private int mCircleWidth = DensityUtil.dp2px(getContext(),10);
+    private int mCircleWidth;
     /**
      * 画笔
      */
@@ -42,62 +42,44 @@ public class VoiceControlView extends View {
     /**
      * 当前进度
      */
-    private int mCurrentCount = 3;
+    private int mCurrentCount ;
 
     /**
      * 中间的图片
      */
     private Bitmap mImage;
     /**
-     * 每个块块间的间隙
+     * 每个块块间的宽度
      */
-    private int mSplitSize = 10;
+    private int mItemSize ;
     /**
      * 个数
      */
-    private int mCount = 10;
+    private int mCount ;
 
     private Rect mRect;
 
-    public VoiceControlView(Context context) {
+    public VoiceControlView1(Context context) {
         this(context,null);
     }
 
-    public VoiceControlView(Context context, AttributeSet attrs) {
+    public VoiceControlView1(Context context, AttributeSet attrs) {
         this(context, attrs,0);
     }
 
-    public VoiceControlView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VoiceControlView1(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //初始化
+        mCurrentCount = 3;//默认有几个被选中
+        //初始化各个控件
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.VoiceControlView,defStyleAttr,0);
-        int len = typedArray.getIndexCount();
-        if (len > 0 ){
-            for (int i=0;i<len ; i++){
-                int type = typedArray.getIndex(i);
-                switch (type){
-                    case R.styleable.VoiceControlView_circleWidth:
-                        mCircleWidth = typedArray.getDimensionPixelSize(type, DensityUtil.dp2px(context,10));
-                        break;
-                    case R.styleable.VoiceControlView_bg:
-                        mImage = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(type,0));
-                        break;
-                    case R.styleable.VoiceControlView_dotCount:
-                        mCount = typedArray.getInt(type,30);
-                        break;
-                    case R.styleable.VoiceControlView_splitSize:
-                        mSplitSize = typedArray.getInt(type,20);
-                        break;
-                    case R.styleable.VoiceControlView_firstColor:
-                        mFirstColor = typedArray.getColor(type, Color.WHITE);
-                        break;
-                    case R.styleable.VoiceControlView_secondColor:
-                        mSecondColor = typedArray.getColor(type,Color.GRAY);
-                        break;
-                }
-            }
-        }
+        mCircleWidth = typedArray.getDimensionPixelSize( R.styleable.VoiceControlView_circleWidth, DensityUtil.dp2px(context,1));
+        mImage = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(R.styleable.VoiceControlView_bg,0));
+        mCount = typedArray.getInt(R.styleable.VoiceControlView_dotCount,20);
+        mItemSize = typedArray.getInt(R.styleable.VoiceControlView_itemSize,20);
+        mFirstColor = typedArray.getColor(R.styleable.VoiceControlView_firstColor, Color.WHITE);
+        mSecondColor = typedArray.getColor(R.styleable.VoiceControlView_secondColor,Color.GRAY);
         typedArray.recycle();//清除
+
         mPaint = new Paint();
         mRect = new Rect();
     }
@@ -107,7 +89,7 @@ public class VoiceControlView extends View {
         super.onDraw(canvas);
         mPaint.setAntiAlias(true);//消除锯齿
         mPaint.setStrokeWidth(mCircleWidth);//设置圆环的宽度
-        mPaint.setStrokeCap(Paint.Cap.ROUND);//定义线段形状为圆头
+//        mPaint.setStrokeCap(Paint.Cap.ROUND);//定义线段形状为圆头
         mPaint.setStyle(Paint.Style.STROKE);//设置为空心
         int centre = getWidth() / 2; // 获取圆心的x坐标
         int radius = centre - mCircleWidth / 2;// 半径
@@ -133,25 +115,40 @@ public class VoiceControlView extends View {
         canvas.drawBitmap(mImage,null,mRect,mPaint);
     }
 
-
+    /**
+     * 画每块
+     * @param canvas
+     * @param centre
+     * @param radius
+     */
     private void drawOval(Canvas canvas,int centre,int radius){
-        float itemSize = ( 360 - mSplitSize*mCount )/mCount;//计算出每块所占比例
+        float splitItem = ( 180  - mItemSize*mCount )/(mCount-1);//计算出每块所占比例,阴影部分总数小于块的部分
+        float split = 180-(mItemSize*mCount + splitItem*(mCount-1));//180度中，未被计算进去的部分。将其加在左右两个空隙中
         RectF oval = new RectF(centre-radius,centre-radius,centre+radius,centre+radius);//定义圆弧的形状和大小界限
-        mPaint.setColor(mFirstColor);//设置圆环的颜色
+        mPaint.setColor(mFirstColor);//设置圆环的基础颜色，即未选中部分的颜色
+        float itemSize = -180;
         for (int i =0 ;i <mCount ;i++){
-            canvas.drawArc(oval,i *(mSplitSize+itemSize) -90 , itemSize,false ,mPaint);
+            canvas.drawArc(oval,itemSize , mItemSize,false ,mPaint);
+            if (i == 0 || i==mCount-2 )
+                itemSize += mItemSize+splitItem + split/2;
+            else
+                itemSize += mItemSize+splitItem;
         }
 
         mPaint.setColor(mSecondColor);
+        float currentItemSize = -180;
         for (int i=0 ; i< mCurrentCount ; i++){
-            canvas.drawArc(oval,i*(mSplitSize+itemSize) -90, itemSize,false,mPaint);
+            canvas.drawArc(oval,currentItemSize , mItemSize,false ,mPaint);
+            if (i == 0 || i == mCount-2 )
+                currentItemSize += mItemSize+splitItem + split/2;
+            else
+                currentItemSize += mItemSize+splitItem;
         }
 
     }
 
-
     /**
-     * 当前数量+1
+     * 当前数量+1，向上划
      */
     public void up() {
         if (mCurrentCount < mCount){
@@ -161,7 +158,7 @@ public class VoiceControlView extends View {
     }
 
     /**
-     * 当前数量-1
+     * 当前数量-1，向下滑
      */
     public void down() {
         if (mCurrentCount > 0){
@@ -169,7 +166,6 @@ public class VoiceControlView extends View {
             postInvalidate();
         }
     }
-
     private int xDown, xUp;
 
     @Override
@@ -180,11 +176,9 @@ public class VoiceControlView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 xUp = (int) event.getY();
-                if (xUp > xDown)// 下滑
-                {
+                if (xUp > xDown) {// 下滑
                     down();
-                } else
-                {
+                } else {
                     up();
                 }
                 break;

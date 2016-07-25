@@ -12,8 +12,29 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
         cir:bg="@mipmap/ic_keyboard_voice_white_36dp"
-        cir:circleWidth="16dp"
-        cir:dotCount="20"
-        cir:splitSize="20"/>
+        cir:firstColor="@color/grey"
+        cir:secondColor="@color/white"
+        cir:circleWidth="8dp"
+        cir:dotCount="10"
+        cir:splitSize="24"/>
 
+    <com.wendy.demoproject.customView.widgets.VoiceControlView1
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        cir:bg="@mipmap/ic_keyboard_voice_white_36dp"
+        cir:firstColor="@color/grey"
+        cir:secondColor="@color/white"
+        cir:circleWidth="8dp"
+        cir:itemSize="1"/>
+
+    <com.wendy.demoproject.customView.widgets.VoiceControlView2
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        cir:bg="@mipmap/ic_keyboard_voice_white_36dp"
+        cir:firstColor="@color/grey"
+        cir:secondColor="@color/white"
+        cir:circleWidth="8dp"
+        cir:itemSize="1"/>
 </LinearLayout>
