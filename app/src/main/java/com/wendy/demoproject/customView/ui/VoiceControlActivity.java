@@ -11,7 +11,7 @@ import com.wendy.demoproject.R;
 public class VoiceControlActivity extends BaseAppActivity {
     @Override
     public int getLayoutID() {
-        return R.layout.customview_ac_voice_control;
+        return R.layout.cv_ac_voice_control;
     }
 
     @Override

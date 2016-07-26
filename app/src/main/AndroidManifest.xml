@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".customView.ui.VoiceControlActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,8 @@
 
         <activity android:name=".customView.ui.CustomViewActivity"></activity>
         <activity android:name=".customView.ui.CirActivity"></activity>
-        <!--<activity android:name=".customView.ui.VoiceControlActivity"></activity>-->
+        <activity android:name=".customView.ui.CouponActivity"></activity>
+        <activity android:name=".customView.ui.VoiceControlActivity"></activity>
     </application>
 
 </manifest>
