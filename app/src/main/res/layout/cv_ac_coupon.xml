@@ -8,13 +8,8 @@
 
     <com.wendy.demoproject.customView.widgets.CouponLinearLayout
         android:layout_width="match_parent"
+        android:background="@color/orange_200"
         android:layout_height="150dp">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/view_padding"
-            android:background="@color/black"/>
 
     </com.wendy.demoproject.customView.widgets.CouponLinearLayout>
 
