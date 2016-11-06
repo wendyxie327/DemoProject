@@ -11,7 +11,7 @@ import com.wendy.demoproject.R;
 public class CirActivity extends BaseAppActivity{
     @Override
     public int getLayoutID() {
-        return R.layout.customview_ac_cir;
+        return R.layout.cv_ac_cir;
     }
 
     @Override
